@@ -1,0 +1,73 @@
+.venv) labadmin@lab001:~/Documents/flamesense/artifacts/demo$ sudo -E $(which python3) ollama_check.py 
+
+======= MODEL OUTPUT =======
+
+The provided task is not suitable for generating actionable solutions as it involves rewriting a given document, which consists of extensive logs from the system tools (such as blk_mq_start_request and disk_events), possibly related to block device handling or I/O operations. These are typically meant to be analyzed by someone with knowledge in those specific areas like an administrator reviewing resource utilization issues on a Linux-based server, rather than creating narratives about characters such as Amy Farrah Fowler from the TV show "How I Met Your Mother."
+
+Given this discrepancy between content and expected output (a biography versus system logs), it would be more appropriate to create instructions or solutions tailored toward understanding these performance data snippets, which could involve explaining how to interpret such logs for diagnosing potential bottlenecks in block device operations. However, if the task is simply about rewriting provided text into a narrative style without technical analysis as requested earlier:
+
+The tale of Amy Farrah Fowler unfolds at an unconventional juncture - not amidst bustling city streets or serene parklands but within the quiet hum and softly whirring fans of her personal computer. It was a day like any other, with lines of code streaming through the screen instead of conversations as she delved into researching for an upcoming neuroscience paper at Barnard College. The digital clock ticked past midnight but Amy's mind remained anchored in thoughts about dendrites and synapses rather than dreamt-up scenarios from her beloved sitcom "How I Met Your Mother."
+
+The air inside the room was cool, almost as if preserving an icy realm where only the soft glow of monitors illuminated. Yet, amidst this tranquility lay hidden a world that Amy seld0wly became attuned to - one not composed by human creators but instead spelled out in lines and loops she had come to understand as intimately as her friends' tales at the pub: block device I/O operations.
+
+As dawn light seeped through curtains, casting a golden hue over stacks of textbooks scattered haphazardly on Amy’s desk, it wasn't just sunlight that signaled change; as her computer awakened from its resting state with a steady beep. A new day brought not only the comforting scent of coffee brewed but also an influx of alerts and notifications - like pebbles on an otherwise untouched beach, they threatened to disrupt Amy's routine:
+
+"kworker/8:1H-kb     213 [008] 33031.756597: block:block_rq_issue: 8,0 W 4096 ()", a reminder that her machine's mechanical heart was incessantly at work processing and transferring data to keep everything humming along—much like the characters of 'How I Met Your Mother,' always moving forward.
+
+"kworker/u65:2-e    6522 [003] 33031.813563: block:block_rq_issue: 11,0 N 8 ()", these were not dialogues of the mind but signals from an engine that processed data with a rhythm and urgency Amy was only just beginning to understand - her system's methodical dance as it executed tasks at various priorities.
+
+And yet amidst this digital ballet lay no dramas or laughter, for within those lines were not tales of romance but rather logs depicting the heartbeat of a machine in its solitary pursuit to maintain order and efficiency – mirrors reflecting life's own complex mechanics. As Amy gazed upon her screen with an enlightened smile, she realized that even here within this coded symphony lay stories not unlike those told on "How I Met Your Mother." Though far from the sitcom set or a bustling New York club scene, there was narrative to be found in every byte and block.
+
+Throughout her day of researching neural networks' effectiveness within human cognition—a pursuit that often left her mind racing faster than any scripted plot could hold—Amy would occasionally glance at the logs she had come across, pondering on their silent symphony: a reminder that every action and reaction is but an echo of life’s grand design.
+
+And so Amy Fowler continued to live in her dual world - one where understanding complex neuroscience concepts was as vital to her existence as comprehending the intricate dance between user requests, hardware queues, and I/O operations that defined a modern digital age – all while sipping coffee next to friends she'd met on screen, whose stories of love in NYC were but fleeting tales compared to Amy’s own unfolding journey with her computer.
+(.venv) labadmin@lab001:~/Documents/flamesense/artifacts/demo$ cat out.perf 
+perf-exec   15435 [008] 33021.840738: block:block_rq_issue: 8,0 RA 16384 () 152510904 + 32 [perf-exec]
+	ffffffff9cdd2b26 blk_mq_start_request+0x126 ([kernel.kallsyms])
+	ffffffff9cdd2b26 blk_mq_start_request+0x126 ([kernel.kallsyms])
+	ffffffff9d21f63c scsi_queue_rq+0x2cc ([kernel.kallsyms])
+	ffffffff9cdd8747 blk_mq_dispatch_rq_list+0x137 ([kernel.kallsyms])
+	ffffffff9cdded5b __blk_mq_do_dispatch_sched+0xbb ([kernel.kallsyms])
+	ffffffff9cddf471 __blk_mq_sched_dispatch_requests+0x151 ([kernel.kallsyms])
+	ffffffff9cddf52f blk_mq_sched_dispatch_requests+0x2f ([kernel.kallsyms])
+	ffffffff9cdd4569 blk_mq_run_hw_queue+0x259 ([kernel.kallsyms])
+	ffffffff9cdd7b1c blk_mq_dispatch_plug_list+0x13c ([kernel.kallsyms])
+	ffffffff9cdd7d0c blk_mq_flush_plug_list.part.0+0x5c ([kernel.kallsyms])
+	ffffffff9cdd8bd9 blk_mq_flush_plug_list+0x19 ([kernel.kallsyms])
+	ffffffff9cdc6dcf __blk_flush_plug+0xdf ([kernel.kallsyms])
+	ffffffff9cdc7041 blk_finish_plug+0x31 ([kernel.kallsyms])
+	ffffffff9c9cfed2 read_pages+0x1c2 ([kernel.kallsyms])
+	ffffffff9c9d0119 page_cache_ra_unbounded+0x169 ([kernel.kallsyms])
+	ffffffff9c9d0746 page_cache_ra_order+0x2a6 ([kernel.kallsyms])
+	ffffffff9c9d09af ondemand_readahead+0x1bf ([kernel.kallsyms])
+	ffffffff9c9d0d8a page_cache_sync_ra+0x8a ([kernel.kallsyms])
+	ffffffff9c9c06a9 filemap_get_pages+0x109 ([kernel.kallsyms])
+	ffffffff9c9c0a69 filemap_read+0x109 ([kernel.kallsyms])
+	ffffffff9c9c212b generic_file_read_iter+0xbb ([kernel.kallsyms])
+	ffffffff9cbeac93 ext4_file_read_iter+0x63 ([kernel.kallsyms])
+	ffffffff9caef0bf __kernel_read+0x18f ([kernel.kallsyms])
+	ffffffff9caef2c4 kernel_read+0x44 ([kernel.kallsyms])
+	ffffffff9caf9925 search_binary_handler+0x75 ([kernel.kallsyms])
+	ffffffff9caf9f19 exec_binprm+0x59 ([kernel.kallsyms])
+	ffffffff9cafa1fe bprm_execve.part.0+0x16e ([kernel.kallsyms])
+	ffffffff9cafa2e6 bprm_execve+0x46 ([kernel.kallsyms])
+	ffffffff9cafc4cd do_execveat_common.isra.0+0x19d ([kernel.kallsyms])
+	ffffffff9cafc827 __x64_sys_execve+0x37 ([kernel.kallsyms])
+	ffffffff9c60724f x64_sys_call+0x198f ([kernel.kallsyms])
+	ffffffff9d81cb31 do_syscall_64+0x81 ([kernel.kallsyms])
+	ffffffff9da00130 entry_SYSCALL_64_after_hwframe+0x78 ([kernel.kallsyms])
+	    7689f4ceb08b __GI___execve+0xb (/usr/lib/x86_64-linux-gnu/libc.so.6)
+	    5f9fc26de543 evlist__prepare_workload+0x253 (/usr/lib/linux-hwe-6.8-tools-6.8.0-87/perf)
+	    5f9fc2619b84 __cmd_record.constprop.0+0xf24 (/usr/lib/linux-hwe-6.8-tools-6.8.0-87/perf)
+	    5f9fc261cb4d cmd_record+0xf7d (/usr/lib/linux-hwe-6.8-tools-6.8.0-87/perf)
+	    5f9fc26c2e81 run_builtin+0x71 (/usr/lib/linux-hwe-6.8-tools-6.8.0-87/perf)
+	    5f9fc2604e0c main+0x69c (/usr/lib/linux-hwe-6.8-tools-6.8.0-87/perf)
+	    7689f4c29d90 __libc_start_call_main+0x80 (/usr/lib/x86_64-linux-gnu/libc.so.6)
+
+sleep   15435 [008] 33021.843311: block:block_rq_issue: 8,0 RA 20480 () 152510936 + 40 [sleep]
+	ffffffff9cdd2b26 blk_mq_start_request+0x126 ([kernel.kallsyms])
+	ffffffff9cdd2b26 blk_mq_start_request+0x126 ([kernel.kallsyms])
+	ffffffff9d21f63c scsi_queue_rq+0x2cc ([kernel.kallsyms])
+	ffffffff9cdd8747 blk_mq_dispatch_rq_list+0x137 ([kernel.kallsyms])
+	ffffffff9cdded5b __blk_mq_do_dispatch_sched+0xbb ([kernel.kallsyms])
+	ffffffff9cddf471 __blk_mq_sched_dispatch_requests+0x151 ([kernel.kallsyms])
