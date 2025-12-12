@@ -1,0 +1,8 @@
+1- User comes to UI types in a prompt
+2- UI service calls LLM (AWS Bedrock), LLM analyzes prompt and decides MCP tool to call
+3- Lambda function to call our MCP server with the correct tool (Need to test/verify) - If not lambda, UI can grab response from LLM and call MCP server directly
+4- MCP calls sherlock with specified tool from previous stage
+5- Sherlock responds back to MCP with json
+6- MCP sends json back to UI
+7- UI layer sends the json + prompt to LLM, displays to user
+ 
