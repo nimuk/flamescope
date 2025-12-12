@@ -6,3 +6,20 @@
 6- MCP sends json back to UI
 7- UI layer sends the json + prompt to LLM, displays to user
  
+User enters prompt in UI
+
+UI sends prompt to backend orchestrator
+
+Orchestrator calls LLM (Bedrock) with MCP tool schema
+
+LLM returns tool call proposal
+
+Orchestrator calls MCP server with tool + args
+
+MCP calls Sherlock and gets JSON
+
+Orchestrator sends tool result back to LLM
+
+LLM returns final answer
+
+UI displays response
