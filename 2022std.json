@@ -90,4 +90,26 @@
             ]
         }
     ]
+
+}
+
+
+
+{
+  "type": "powershell",
+  "elevated_user": "{{ user `admin_user` }}",
+  "elevated_password": "{{ user `admin_pass` }}",
+  "script": "./ts.ps1",
+  "pause_before": "60s",
+  "valid_exit_codes": [0]
+},
+{
+  "type": "powershell",
+  "elevated_user": "{{ user `admin_user` }}",
+  "elevated_password": "{{ user `admin_pass` }}",
+  "inline": [
+    "Write-Host 'Final step: Sysprep'",
+    "C:\\Windows\\System32\\Sysprep\\Sysprep.exe /generalize /oobe /quiet /shutdown /unattend:C:\\windows\\platform\\scripts\\SysPrep.xml"
+  ],
+  "expect_disconnect": true
 }
