@@ -1,0 +1,93 @@
+{
+    "variables": {
+        "iso_url": "D:/files/packerstuff/wingoldharvest.vhdx",
+        "iso_checksum": "DD56EB3AC52FE61D37F2176C8BD8E533",
+        "admin_user": "",
+        "admin_pass": "",
+        "Build": "2022",
+        "Edition": "Std",
+        "Release": "BETA"
+    },
+    "builders": [
+        {
+            "type": "hyperv-iso",
+            "generation": "1",
+            "vm_name": "{{ user `Build` }}-{{user `Edition`}}-Patched-{{user `Release`}}",
+            "temp_path": "D:/files/packerstuff/TMP",
+            "output_directory": "D:/files/packerstuff/OUT",
+            "iso_url": "{{ user `iso_url` }}",
+            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_target_extension": "vhdx",
+            "boot_wait": "100s",
+            "communicator": "winrm",
+            "winrm_port": "5985",
+            "winrm_username": "{{ user `admin_user` }}",
+            "winrm_password": "{{ user `admin_pass` }}",
+            "winrm_timeout": "1h",
+            "shutdown_command":  "c:\\windows\\system32\\sysprep\\sysprep.exe /generalize /oobe /quiet /shutdown /unattend:C:\\windows\\platform\\scripts\\SysPrep.xml \u0026\u0026 ipconfig/release",
+            "shutdown_timeout": "1h",
+            "CPUS": 4,
+            "memory": 8192
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "powershell",
+            "elevated_user": "{{ user `admin_user` }}",
+            "elevated_password": "{{ user `admin_pass` }}",
+            "script": "./install_wsus_patches_etf.ps1",
+            "pause_before": "60s",
+            "valid_exit_codes": [
+                0
+            ]
+        },
+        {
+            "type": "windows-restart",
+            "restart_timeout": "180m",
+            "pause_before": "30s"
+        },
+        {
+            "type": "powershell",
+            "elevated_user": "{{ user `admin_user` }}",
+            "elevated_password": "{{ user `admin_pass` }}",
+            "script": "./install_wsus_patches_etf.ps1",
+            "pause_before": "60s",
+            "valid_exit_codes": [
+                0
+            ]
+        },
+        {
+            "type": "windows-restart",
+            "restart_timeout": "180m",
+            "pause_before": "30s"
+        },
+        {
+            "type": "powershell",
+            "elevated_user": "{{ user `admin_user` }}",
+            "elevated_password": "{{ user `admin_pass` }}",
+            "script": "./install_wsus_patches_etf.ps1",
+            "pause_before": "60s",
+            "valid_exit_codes": [
+                0
+            ]
+        },
+
+        
+        {
+            "type": "windows-restart",
+            "restart_timeout": "180m",
+            "pause_before": "60s"
+        },
+        
+        {
+            "type": "powershell",
+            "elevated_user": "{{ user `admin_user` }}",
+            "elevated_password": "{{ user `admin_pass` }}",
+            "script": "./ts.ps1",
+            "pause_before": "60s",
+            "valid_exit_codes": [
+                0
+            ]
+        }
+    ]
+}
