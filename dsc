@@ -1,11 +1,43 @@
-$RepoPath = "D:\PSOfflineRepo"
+Configuration DemoConfig {
+    param(
+        [string[]]$NodeName = "localhost"
+    )
 
-$Dest = "C:\Program Files\WindowsPowerShell\Modules"
-New-Item -ItemType Directory -Path $Dest -Force | Out-Null
+    Import-DscResource -ModuleName PSDscResources
 
-Get-ChildItem $RepoPath -Directory | ForEach-Object {
-    $moduleName = $_.Name
-    $latestVersionDir = Get-ChildItem $_.FullName -Directory | Sort-Object Name -Descending | Select-Object -First 1
+    Node $NodeName {
 
-    Copy-Item -Path $latestVersionDir.FullName -Destination (Join-Path $Dest $moduleName) -Recurse -Force
+        # Example: ensure a file exists
+        File DemoFile {
+            Ensure          = "Present"
+            Type            = "File"
+            DestinationPath = "C:\DSC\hello.txt"
+            Contents        = "Hello from DSC push mode. $(Get-Date)"
+        }
+
+        # Example: ensure a Windows feature (Server only)
+        # WindowsFeature TelnetClient {
+        #     Name   = "Telnet-Client"
+        #     Ensure = "Present"
+        # }
+    }
+}
+
+[DSCLocalConfigurationManager()]
+Configuration LCMConfig {
+    param(
+        [string[]]$NodeName
+    )
+
+    Node $NodeName {
+        Settings {
+            RefreshMode                    = "Push"
+            ConfigurationMode             = "ApplyAndAutoCorrect"  # or ApplyAndMonitor
+            ConfigurationModeFrequencyMins = 30
+            RefreshFrequencyMins          = 60
+            RebootNodeIfNeeded            = $true
+            ActionAfterReboot             = "ContinueConfiguration"
+            StatusRetentionTimeInDays     = 7
+        }
+    }
 }
