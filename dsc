@@ -1,43 +1,61 @@
-New-Item -ItemType Directory C:\DSC\Demo -Force | Out-Null
-Set-Location C:\DSC\Demo
-
-. .\DemoConfig.ps1
-DemoConfig -NodeName @("client1","client2") -OutputPath .\DemoConfig
-
-[DSCLocalConfigurationManager()]
-Configuration LCMConfig {
+Configuration ScriptPushConfig {
     param(
-        [string[]]$NodeName
+        [string[]]$NodeName,
+        [string]$SourceScriptsPath = "C:\DSC\Scripts"
     )
 
+    Import-DscResource -ModuleName PSDscResources
+
     Node $NodeName {
-        Settings {
-            RefreshMode                    = "Push"
-            ConfigurationMode             = "ApplyAndAutoCorrect"  # or ApplyAndMonitor
-            ConfigurationModeFrequencyMins = 30
-            RefreshFrequencyMins          = 60
-            RebootNodeIfNeeded            = $true
-            ActionAfterReboot             = "ContinueConfiguration"
-            StatusRetentionTimeInDays     = 7
+
+        # Ensure destination folder exists on client
+        File ScriptFolder {
+            Ensure          = "Present"
+            Type            = "Directory"
+            DestinationPath = "C:\DSC\Scripts"
+        }
+
+        # Copy all scripts from server -> client
+        File CopyScripts {
+            Ensure          = "Present"
+            Type            = "Directory"
+            SourcePath      = $SourceScriptsPath
+            DestinationPath = "C:\DSC\Scripts"
+            Recurse         = $true
+            DependsOn       = "[File]ScriptFolder"
         }
     }
 }
 
-Start-DscConfiguration -ComputerName client1,client2 -Path .\DemoConfig -Verbose -Wait -Force
+        Script RunInstall {
+            DependsOn = "[File]CopyScripts"
 
-. .\LCMConfig.ps1
-LCMConfig -NodeName @("client1","client2") -OutputPath .\LCMConfig
+            GetScript = {
+                $marker = "C:\DSC\Scripts\.install_done"
+                @{ Result = (Test-Path $marker) }
+            }
 
-Start-DscConfiguration -ComputerName client1,client2 -Path .\DemoConfig -Verbose -Wait -Force
+            TestScript = {
+                Test-Path "C:\DSC\Scripts\.install_done"
+            }
 
-Set-DscLocalConfigurationManager -ComputerName client1,client2 -Path .\LCMConfig -Verbose
+            SetScript = {
+                $script = "C:\DSC\Scripts\Install-MyThing.ps1"
 
-Invoke-Command -ComputerName client1,client2 -ScriptBlock {
-    Test-Path C:\DSC\hello.txt
-    Get-Content C:\DSC\hello.txt -ErrorAction SilentlyContinue
-}
+                # run it
+                powershell.exe -NoProfile -ExecutionPolicy Bypass -File $script
+
+                # mark success
+                New-Item -ItemType File -Path "C:\DSC\Scripts\.install_done" -Force | Out-Null
+            }
+        }
 
 
+Set-Location C:\DSC\Config
+. .\ScriptPushConfig.ps1
+
+New-Item -ItemType Directory C:\DSC\Out -Force | Out-Null
+ScriptPushConfig -NodeName @("client1","client2") -OutputPath C:\DSC\Out
 
 
-
+Start-DscConfiguration -ComputerName client1,client2 -Path C:\DSC\Out -Wait -Verbose -Force
