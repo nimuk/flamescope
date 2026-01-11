@@ -41,3 +41,10 @@ Configuration LCMConfig {
         }
     }
 }
+
+$env:PSModulePath -split ';'
+
+Get-ChildItem "C:\Program Files\WindowsPowerShell\Modules\PSDscResources" -ErrorAction SilentlyContinue | Select-Object FullName
+
+Get-Module -ListAvailable PSDscResources | Format-List Name,Version,ModuleBase
+
