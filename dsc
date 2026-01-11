@@ -32,6 +32,12 @@ Start-DscConfiguration -ComputerName client1,client2 -Path .\DemoConfig -Verbose
 
 Set-DscLocalConfigurationManager -ComputerName client1,client2 -Path .\LCMConfig -Verbose
 
+Invoke-Command -ComputerName client1,client2 -ScriptBlock {
+    Test-Path C:\DSC\hello.txt
+    Get-Content C:\DSC\hello.txt -ErrorAction SilentlyContinue
+}
+
+
 
 
 
