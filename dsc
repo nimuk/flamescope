@@ -28,4 +28,7 @@ Start-DscConfiguration -ComputerName client1,client2 -Path .\DemoConfig -Verbose
 . .\LCMConfig.ps1
 LCMConfig -NodeName @("client1","client2") -OutputPath .\LCMConfig
 
+Start-DscConfiguration -ComputerName client1,client2 -Path .\DemoConfig -Verbose -Wait -Force
+
+
 
