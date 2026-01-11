@@ -42,14 +42,14 @@ Configuration LCMConfig {
     }
 }
 
-$nupkg = "D:\PSOfflineRepo\PSDscResources.2.12.0.nupkg"
-$dest  = "C:\Program Files\WindowsPowerShell\Modules\PSDscResources\2.12.0"
+PS C:\Users\mukherjeen_eng\Desktop> Get-Module -ListAvailable PSDscResources | Format-List Name,Version,ModuleBase
 
-Remove-Item $dest -Recurse -Force -ErrorAction SilentlyContinue
-New-Item -ItemType Directory -Path $dest -Force | Out-Null
 
-Expand-Archive -Path $nupkg -DestinationPath $dest -Force
+Name       : PSDscResources
+Version    : 2.12.0.0
+ModuleBase : C:\Program Files\WindowsPowerShell\Modules\PSDscResources\2.12.0.0
 
-Get-ChildItem $dest | Select Name,Length
-Test-ModuleManifest -Path (Join-Path $dest "PSDscResources.psd1") -Verbose
-Get-Module -ListAvailable PSDscResources | Format-List Name,Version,ModuleBase
+
+
+
+PS C:\Users\mukherjeen_eng\Desktop> Import-Module PSDscResources
