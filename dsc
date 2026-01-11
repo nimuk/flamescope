@@ -42,19 +42,8 @@ Configuration LCMConfig {
     }
 }
 
-$env:PSModulePath -split ';'
-C:\Users\mukherjeen_eng\Documents\WindowsPowerShell\Modules
-C:\Program Files\WindowsPowerShell\Modules
-C:\Windows\system32\WindowsPowerShell\v1.0\Modules
-PS C:\Program Files\WindowsPowerShell\Modules\PSDScResources\2.12.0>
-PS C:\Program Files\WindowsPowerShell\Modules\PSDScResources\2.12.0> Get-ChildItem "C:\Program Files\WindowsPowerShell\Modules\PSDscResources" -ErrorAction SilentlyContinue | Select-Object FullName
-
-FullName
---------
-C:\Program Files\WindowsPowerShell\Modules\PSDscResources\2.12.0
-
-
-PS C:\Program Files\WindowsPowerShell\Modules\PSDScResources\2.12.0>
-PS C:\Program Files\WindowsPowerShell\Modules\PSDScResources\2.12.0> Get-Module -ListAvailable PSDscResources | Format-List Name,Version,ModuleBase
-PS C:\Program Files\WindowsPowerShell\Modules\PSDScResources\2.12.0>
-
+$base="C:\Program Files\WindowsPowerShell\Modules\PSDscResources\2.12.0"
+"Base exists: $(Test-Path $base)"
+"Has psd1 at base: $(Test-Path (Join-Path $base 'PSDscResources.psd1'))"
+"Has nested folder: $(Test-Path (Join-Path $base 'PSDscResources'))"
+Get-ChildItem $base -Recurse -Filter "PSDscResources.psd1" -ErrorAction SilentlyContinue | Select FullName
